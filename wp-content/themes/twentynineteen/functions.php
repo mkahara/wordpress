@@ -321,3 +321,70 @@ require get_template_directory() . '/inc/template-tags.php';
  * Customizer additions.
  */
 require get_template_directory() . '/inc/customizer.php';
+
+function my_stories() {
+
+// Set UI labels for Custom Post Type
+    $labels = array(
+        'name'                => _x( 'Stories', 'Post Type General Name', 'twentyninenteen' ),
+        'singular_name'       => _x( 'Story', 'Post Type Singular Name', 'twentyninenteen' ),
+        'menu_name'           => __( 'Stories', 'twentyninenteen' ),
+        'parent_item_colon'   => __( 'Parent Story', 'twentyninenteen' ),
+        'all_items'           => __( 'All Stories', 'twentyninenteen' ),
+        'view_item'           => __( 'View Story', 'twentyninenteen' ),
+        'add_new_item'        => __( 'Add New Story', 'twentyninenteen' ),
+        'add_new'             => __( 'Add New', 'twentyninenteen' ),
+        'edit_item'           => __( 'Edit Story', 'twentyninenteen' ),
+        'update_item'         => __( 'Update Story', 'twentyninenteen' ),
+        'search_items'        => __( 'Search Story', 'twentyninenteen' ),
+        'not_found'           => __( 'Not Found', 'twentyninenteen' ),
+        'not_found_in_trash'  => __( 'Not found in Trash', 'twentyninenteen' ),
+    );
+
+// Set other options for Custom Post Type
+
+    $args = array(
+        'label'               => __( 'stories', 'twentyninenteen' ),
+        'description'         => __( 'Community stories', 'twentyninenteen' ),
+        'labels'              => $labels,
+        // Features this CPT supports in Post Editor
+        'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
+        // You can associate this CPT with a taxonomy or custom taxonomy. 
+        'taxonomies'          => array( 'genres' ),
+        /* A hierarchical CPT is like Pages and can have
+        * Parent and child items. A non-hierarchical CPT
+        * is like Posts.
+        */
+        'hierarchical'        => false,
+        'public'              => true,
+        'show_ui'             => true,
+        'show_in_menu'        => true,
+        'show_in_nav_menus'   => true,
+        'show_in_admin_bar'   => true,
+        'menu_position'       => 5,
+        'can_export'          => true,
+        'has_archive'         => true,
+        'exclude_from_search' => false,
+        'publicly_queryable'  => true,
+        'capability_type'     => 'page',
+    );
+
+    // Registering your Custom Post Type
+    register_post_type( 'stories', $args );
+
+}
+
+/* Hook into the 'init' action so that the function
+* Containing our post type registration is not 
+* unnecessarily executed. 
+*/
+
+add_action( 'init', 'my_stories', 0 );
+
+/* Replace all occurences of hello with good morning if its before 11am */
+
+function replace_text($text) {
+    $text = str_replace('hello', 'good morning', $text);
+    return $text;
+}
+add_filter('the_content', 'replace_text');
